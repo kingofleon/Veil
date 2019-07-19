@@ -11,6 +11,7 @@ from tools.evasion.evasion_common import encryption
 from tools.evasion.evasion_common import evasion_helpers
 from tools.evasion.evasion_common import gamemaker
 from tools.evasion.evasion_common import shellcode_help
+from tools.evasion.evasion_common import payload_encryption
 
 
 class PayloadModule:
@@ -123,5 +124,6 @@ class PayloadModule:
         if self.required_options["USE_PYHERION"][0].lower() == "y":
             payload_code = encryption.pyherion(payload_code)
 
-        self.payload_source_code = payload_code
+        # Wrap payload in AES encryption if username, hostname, processors and/or domain is provided
+        self.payload_source_code = payload_encryption.encrypt_payload_python(self, payload_code)
         return
